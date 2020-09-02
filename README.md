@@ -1,19 +1,22 @@
-# Serverless Workflow - VSC Extension
+# Serverless Workflow Specification - VSCode Extension
 
-JSON Schema support for the [CNCF Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
+Provides code hints and snippets for the [CNCF Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
 
 ## Features
 
 ### Code Hints
 
-This extension provides Code Hints for JSON files in your project against the
-Serverless Workflow specification JSON Schema.
+This extension provides Code Hints for JSON and YAML files in your project against the
+Serverless Workflow specification schema.
 This includes:
 
 - Prompting correct attribute names as you type.
 - Displaying of mismatched types or missing required properties
 - Allows use of Ctrl+Space to show available properties
 - Code completion even for enum types
+
+Note that to enable the YAML code completion support, you must 
+install the [VSCode YAML extension](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) first.
 
 ### Code Snippets
 
