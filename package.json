@@ -32,7 +32,7 @@
 		"jsonValidation": [
 			{
 				"fileMatch": "/*.json",
-				"url": "https://raw.githubusercontent.com/serverlessworkflow/vscode-extension/master/schemas/workflow.json"
+				"url": "https://raw.githubusercontent.com/serverlessworkflow/specification/master/schema/workflow.json"
 			}
 		],
 		"snippets": [
@@ -47,7 +47,7 @@
 				"yaml.schemas": {
 					"type": "object",
 					"default": {
-						"https://raw.githubusercontent.com/serverlessworkflow/vscode-extension/master/schemas/workflow.json": [
+						"https://raw.githubusercontent.com/serverlessworkflow/specification/master/schema/workflow.json": [
 							"/*"
 						]
 					},
