@@ -1,11 +1,11 @@
 {
-	"name": "workflow-schema-vscode",
-	"displayName": "Serverless Workflow JSON Schema",
+	"name": "serverless-workflow-vscode-extension",
+	"displayName": "Serverless Workflow VSCode Extension",
 	"description": "%description%",
-	"version": "1.11.0",
+	"version": "1.0.0",
 	"icon": "resources/serverless-workflow-logo.png",
-	"publisher": "tsurdilovic",
-	"author": "Tihomir Surdilovic",
+	"publisher": "serverlessworkflow",
+	"author": "Serverless Workflow",
 	"license": "Apache-2.0",
 	"engines": {
 		"vscode": "^1.35.0"
@@ -32,7 +32,7 @@
 		"jsonValidation": [
 			{
 				"fileMatch": "/*.json",
-				"url": "./schemas/workflow.json"
+				"url": "https://raw.githubusercontent.com/serverlessworkflow/vscode-extension/master/schemas/workflow.json"
 			}
 		],
 		"snippets": [
@@ -40,7 +40,21 @@
 				"language": "json",
 				"path": "./snippets.json"
 			}
-		]
+		],
+		"configuration": {
+			"title": "YAML validation",
+			"properties": {
+				"yaml.schemas": {
+					"type": "object",
+					"default": {
+						"https://raw.githubusercontent.com/serverlessworkflow/vscode-extension/master/schemas/workflow.json": [
+							"/*"
+						]
+					},
+					"description": "Associate Workflow Schema"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"compile": "tsc -p ./",
