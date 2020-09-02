@@ -1,0 +1,84 @@
+{
+	"name": "workflow-schema-vscode",
+	"displayName": "Serverless Workflow JSON Schema",
+	"description": "%description%",
+	"version": "1.11.0",
+	"icon": "resources/serverless-workflow-logo.png",
+	"publisher": "tsurdilovic",
+	"author": "Tihomir Surdilovic",
+	"license": "Apache-2.0",
+	"engines": {
+		"vscode": "^1.35.0"
+	},
+	"keywords": [
+		"serverless",
+		"workflow",
+		"json",
+		"schema"
+	],
+	"categories": [
+		"Snippets",
+		"Programming Languages",
+		"Linters",
+		"Other"
+	],
+	"homepage": "https://github.com/serverless-workflow/workflow-schema-vscode/blob/master/README.md",
+	"readmeFilename": "README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/serverless-workflow/workflow-schema-vscode.git"
+	},
+	"contributes": {
+		"jsonValidation": [
+			{
+				"fileMatch": "/*.json",
+				"url": "./schemas/workflow.json"
+			}
+		],
+		"snippets": [
+			{
+				"language": "json",
+				"path": "./snippets.json"
+			}
+		]
+	},
+	"scripts": {
+		"compile": "tsc -p ./",
+		"tslint": "tslint -t verbose src/*.ts --project tslint.json",
+		"watch": "webpack --mode development --watch --info-verbosity verbose",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test",
+		"webpack": "webpack --mode development"
+	},
+	"devDependencies": {
+		"@types/fs-extra": "^4.0.8",
+		"@types/get-port": "^4.0.1",
+		"@types/md5": "^2.1.33",
+		"@types/minimatch": "^3.0.3",
+		"@types/node": "^8.10.40",
+		"@types/xml2js": "^0.4.3",
+		"elliptic": "^6.5.3",
+		"kind-of": ">=6.0.3",
+		"minimist": ">=1.2.3",
+		"ts-loader": "^4.4.2",
+		"tslint": "^5.13.0",
+		"typescript": "^2.9.2",
+		"vscode": "^1.1.33",
+		"webpack": "4.41.0",
+		"webpack-cli": "3.3.9"
+	},
+	"dependencies": {
+		"@types/lodash": "^4.14.136",
+		"fast-glob": "^2.2.4",
+		"fs-extra": "^4.0.3",
+		"get-port": "^4.2.0",
+		"kind-of": ">=6.0.3",
+		"lodash": "^4.17.1",
+		"md5": "^2.2.1",
+		"minimatch": "^3.0.4",
+		"minimist": ">=1.2.3",
+		"serialize-javascript": "^2.1.2",
+		"xml-zero-lexer": "^2.0.5",
+		"xml2js": "^0.4.19"
+	}
+}
