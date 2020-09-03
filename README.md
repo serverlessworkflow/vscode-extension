@@ -2,6 +2,10 @@
 
 Provides code hints and snippets for the [CNCF Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
 
+<p align="center">
+<img src="resources/vscodeextexample.gif" width="500px"/>
+</p>
+
 ## Features
 
 ### Code Hints
