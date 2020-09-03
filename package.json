@@ -13,7 +13,10 @@
 	"keywords": [
 		"serverless",
 		"workflow",
+		"validation",
+		"snippets",
 		"json",
+		"yaml",
 		"schema"
 	],
 	"categories": [
