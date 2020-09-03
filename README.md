@@ -13,7 +13,7 @@ This includes:
 - Prompting correct attribute names as you type.
 - Displaying of mismatched types or missing required properties
 - Allows use of Ctrl+Space to show available properties
-- Code completion even for enum types
+- Code completion for enum types
 
 Note that to enable the YAML code completion support, you must 
 install the [VSCode YAML extension](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) first.
@@ -22,7 +22,8 @@ install the [VSCode YAML extension](https://marketplace.visualstudio.com/items?i
 
 This extension also provides Code Snippets for the serverless workflow specification markup:
 
-- swn: Create a new workflow definition
+- swj: Create a new JSON workflow definition
+- swy: Create a new YAML workflow definition
 - adding more in next version
 
 ## Building from source
@@ -32,43 +33,37 @@ the latest changes/updates locally follow these steps:
 
 1. Clone the extension git repository
 
-```
+``` text
 git clone https://github.com/serverless-workflow/workflow-schema-vscode.git
 cd workflow-schema-vscode
 ```
 
 2. Build the necessary modules
 
-```
+``` text
 npm install
 ```
 
 3. Build and package the extension with vsce:
 
-```
+``` text
 vsce package
 ```
 
 To install vsce run:
 
-```
+``` text
 npm install -g vsce
 ```
 
 4. vsce will create a workflow-schema-vscode-$VERSION$.vsix file which you have to install to your ide, for this run:
 
-```
+``` text
 code --install-extension workflow-schema-vscode-$VERSION$.vsix
 ```
 
 to uninstall the extension run:
 
-```
+``` text
 code --uninstall-extension workflow-schema-vscode-$VERSION$.vsix
 ```
-
-## Contributing
-
-This extension is open-source and free to use to anyone.
-All/any contributions are very welcome and much needed in order to make this extension much better.
-Best way to contribute is to create Pull Request(s) on the github project.
