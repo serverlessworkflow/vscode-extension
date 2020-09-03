@@ -38,7 +38,11 @@
 		"snippets": [
 			{
 				"language": "json",
-				"path": "./snippets.json"
+				"path": "./snippetsjson.json"
+			},
+			{
+				"language": "yaml",
+				"path": "./snippetsyaml.json"
 			}
 		],
 		"configuration": {

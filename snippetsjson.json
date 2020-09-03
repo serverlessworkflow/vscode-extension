@@ -1,6 +1,6 @@
 {
-	"ServerlessWorkflow - new workflow": {
-		"prefix": "swn",
+	"New JSON workflow": {
+		"prefix": "swj",
 		"body": [
 			"{",
 			"\"id\": \"${1:id}\",",
@@ -17,6 +17,6 @@
 			"]",
 			"}"
 		],
-		"description": "New Serverless Workflow definition."
+		"description": "New JSON Serverless Workflow definition."
 	}
 }
