@@ -3,7 +3,7 @@
 Provides code hints and snippets for the [CNCF Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
 
 <p align="center">
-<img src="resources/vscodeextexample.gif" width="500px"/>
+<img src="resources/extexample.gif" width="550px"/>
 </p>
 
 ## Features
