@@ -8,7 +8,7 @@
 	"author": "Serverless Workflow",
 	"license": "Apache-2.0",
 	"engines": {
-		"vscode": "^1.35.0"
+		"vscode": "^1.37.0"
 	},
 	"keywords": [
 		"serverless",
@@ -21,17 +21,58 @@
 	],
 	"categories": [
 		"Snippets",
-		"Programming Languages",
-		"Linters",
 		"Other"
 	],
+	"bugs": {
+		"url": "https://github.com/serverless-workflow/workflow-schema-vscode/issues"
+	},
 	"homepage": "https://github.com/serverless-workflow/workflow-schema-vscode/blob/master/README.md",
 	"readmeFilename": "README.md",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/serverless-workflow/workflow-schema-vscode.git"
 	},
+	"activationEvents": [
+		"onLanguage:json",
+		"onLanguage:yaml",
+		"onCommand:swdiagram.open",
+		"onWebviewPanel:svg.preview",
+		"*"
+	],
+	"main": "./out/extension.js",
 	"contributes": {
+		"commands": [
+			{
+				"command": "swdiagram.open",
+				"title": "Serverless Workflow: View Diagram",
+				"icon": {
+					"light": "./media/preview-darkgray.svg",
+					"dark": "./media/preview-lightgray.svg"
+				}
+			}
+		],
+		"menus": {
+			"editor/title": [
+				{
+					"when": "editorLangId == json || editorLangId == yaml",
+					"command": "swdiagram.open",
+					"group": "navigation"
+				}
+			],
+			"explorer/context": [
+				{
+					"command": "swdiagram.open",
+					"group": "extension",
+					"when": "resourceLangId  == json || resourceLangId == yaml"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "swdiagram.open",
+				"key": "alt+shift+s o"
+			}
+		],
 		"jsonValidation": [
 			{
 				"fileMatch": "/*.json",
@@ -49,7 +90,7 @@
 			}
 		],
 		"configuration": {
-			"title": "YAML validation",
+			"title": "VSCode Serverless Workflow configuration",
 			"properties": {
 				"yaml.schemas": {
 					"type": "object",
@@ -59,17 +100,55 @@
 						]
 					},
 					"description": "Associate Workflow Schema"
+				},
+				"swdiagram.diagramserviceurl": {
+					"type": "string",
+					"default": "diagram-service-mmagnani.apps.kogito-cloud.automation.rhmw.io",
+					"description": "SW Diagram Service URL"
+				},
+				"swdiagram.transparencygrid": {
+					"type": "boolean",
+					"default": true,
+					"description": "Show Transparency Grid"
+				},
+				"swdiagram.transparencycolor": {
+					"type": "string",
+					"default": null,
+					"description": "Color setting for transparency"
+				},
+				"swdiagram.enableautopreview": {
+					"type": "boolean",
+					"default": false,
+					"description": "Open or not open the preview screen automatically"
+				},
+				"swdiagram.previewcolumn": {
+					"type": "string",
+					"enum": [
+						"Active",
+						"Beside"
+					],
+					"default": "Beside",
+					"description": "How to open the screen (vscode.ViewColumn)"
+				},
+				"swdiagram.showzoominout": {
+					"type": "boolean",
+					"default": false,
+					"description": "Show zoom in/out button in preview windows"
+				},
+				"swdiagram.autoInsertNamespace": {
+					"type": "boolean",
+					"default": true,
+					"description": "If SVG namespace doesn't exist in a file, it will be added automatically"
 				}
 			}
 		}
 	},
 	"scripts": {
+		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"tslint": "tslint -t verbose src/*.ts --project tslint.json",
-		"watch": "webpack --mode development --watch --info-verbosity verbose",
+		"watch": "tsc -watch -p ./",
 		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test",
-		"webpack": "webpack --mode development"
+		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
 		"@types/fs-extra": "^4.0.8",
@@ -84,21 +163,28 @@
 		"ts-loader": "^4.4.2",
 		"tslint": "^5.13.0",
 		"typescript": "^2.9.2",
-		"vscode": "^1.1.33",
-		"webpack": "4.41.0",
-		"webpack-cli": "3.3.9"
+		"vscode": "^1.1.33"
 	},
 	"dependencies": {
 		"@types/lodash": "^4.14.136",
+		"copy-paste": "^1.3.0",
 		"fast-glob": "^2.2.4",
 		"fs-extra": "^4.0.3",
 		"get-port": "^4.2.0",
+		"jquery": "^3.3.1",
 		"kind-of": ">=6.0.3",
 		"lodash": "^4.17.1",
 		"md5": "^2.2.1",
 		"minimatch": "^3.0.4",
 		"minimist": ">=1.2.3",
+		"path": "^0.12.7",
+		"phantomjs": "^2.1.7",
+		"phantomjs-prebuilt": "^2.1.16",
+		"pn": "^1.1.0",
+		"request": "^2.88.2",
 		"serialize-javascript": "^2.1.2",
+		"svgexport": "^0.3.2",
+		"tmp": "0.0.33",
 		"xml-zero-lexer": "^2.0.5",
 		"xml2js": "^0.4.19"
 	}
