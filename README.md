@@ -2,11 +2,12 @@
 
 Provides code hints and snippets for the [CNCF Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
 
-<p align="center">
-<img src="https://media.giphy.com/media/MXof4aL5wCWslTNkW4/giphy.gif" width="550px"/>
-</p>
-
 ## Features
+
+- [Code Hints](#Code-Hints)
+- [Code Snippets](#Code-Snippets)
+- [Diagram Generation](#Diagram-Generation)
+- [Exporting Diagram to PNG](#Exporting-Diagram-to-PNG)
 
 ### Code Hints
 
@@ -29,6 +30,26 @@ This extension also provides Code Snippets for the serverless workflow specifica
 - swj: Create a new JSON workflow definition
 - swy: Create a new YAML workflow definition
 - adding more in next version
+
+### Diagram Generation
+
+  You can generate the workflow diagram SVG (and preview it). While working on a workflow Json or Yaml files you can 
+  preview it by:
+
+  - Open the Command Pallelte (⇧⌘P)
+  - Select: "Serverless Workflow: Generate Diagram"
+  
+  This will generate the workflow diagram SVG and present it side-by-side to your workflow source file.
+  In addition it will generate a `myworkflow.svg` file in the same directory as your workflow model where `myworkflow` here is 
+  the name of your workflow model file (json or yaml).
+
+### Exporting Diagram to PNG
+    
+    Once you have generated the workflow diagram (see section above) you can right-click on your workflow model (json or yaml) 
+    file and select from the menu "Serverless Workflow: Export Diagram to PNG".
+    
+    This will convert the workflow diagram to PNG and also create a `myworkflow.png` file in the same directory as your workflow model where `myworkflow` here is the name of your workflow model file (json or yaml).
+
 
 ## Building from source
 

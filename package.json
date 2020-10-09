@@ -44,12 +44,16 @@
 		"commands": [
 			{
 				"command": "swdiagram.open",
-				"title": "Serverless Workflow: View Diagram",
+				"title": "Serverless Workflow: Generate Diagram",
 				"icon": {
 					"light": "./media/preview-darkgray.svg",
 					"dark": "./media/preview-lightgray.svg"
 				}
-			}
+			},
+			{
+                "command": "swdiagram.saveas",
+                "title": "Serverless Workflow: Export Diagram to PNG"
+            }
 		],
 		"menus": {
 			"editor/title": [
@@ -64,14 +68,23 @@
 					"command": "swdiagram.open",
 					"group": "extension",
 					"when": "resourceLangId  == json || resourceLangId == yaml"
-				}
+				},
+				{
+                    "command": "swdiagram.saveas",
+                    "group": "extension",
+                    "when": "resourceLangId  == json || resourceLangId == yaml"
+                }
 			]
 		},
 		"keybindings": [
 			{
 				"command": "swdiagram.open",
 				"key": "alt+shift+s o"
-			}
+			},
+			{
+                "command": "svgviewer.saveas",
+                "key": "alt+shift+s e"
+            }
 		],
 		"jsonValidation": [
 			{
