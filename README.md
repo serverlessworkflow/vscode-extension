@@ -59,8 +59,8 @@ the latest changes/updates locally follow these steps:
 1. Clone the extension git repository
 
 ``` text
-git clone https://github.com/serverless-workflow/workflow-schema-vscode.git
-cd workflow-schema-vscode
+git clone https://github.com/serverlessworkflow/vscode-extension.git
+cd vscode-extension
 ```
 
 2. Build the necessary modules
@@ -81,14 +81,14 @@ To install vsce run:
 npm install -g vsce
 ```
 
-4. vsce will create a workflow-schema-vscode-$VERSION$.vsix file which you have to install to your ide, for this run:
+4. vsce will create a serverless-workflow-vscode-extension-$VERSION$.vsix file which you have to install to your ide, for this run:
 
 ``` text
-code --install-extension workflow-schema-vscode-$VERSION$.vsix
+code --install-extension serverless-workflow-vscode-extension-$VERSION$.vsix
 ```
 
 to uninstall the extension run:
 
 ``` text
-code --uninstall-extension workflow-schema-vscode-$VERSION$.vsix
+code --uninstall-extension serverless-workflow-vscode-extension-$VERSION$.vsix
 ```
