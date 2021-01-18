@@ -51,9 +51,9 @@
 				}
 			},
 			{
-                "command": "swdiagram.saveas",
-                "title": "Serverless Workflow: Export Diagram to PNG"
-            }
+				"command": "swdiagram.saveas",
+				"title": "Serverless Workflow: Export Diagram to PNG"
+			}
 		],
 		"menus": {
 			"editor/title": [
@@ -70,10 +70,10 @@
 					"when": "resourceLangId  == json || resourceLangId == yaml"
 				},
 				{
-                    "command": "swdiagram.saveas",
-                    "group": "extension",
-                    "when": "resourceLangId  == json || resourceLangId == yaml"
-                }
+					"command": "swdiagram.saveas",
+					"group": "extension",
+					"when": "resourceLangId  == json || resourceLangId == yaml"
+				}
 			]
 		},
 		"keybindings": [
@@ -82,14 +82,14 @@
 				"key": "alt+shift+s o"
 			},
 			{
-                "command": "svgviewer.saveas",
-                "key": "alt+shift+s e"
-            }
+				"command": "svgviewer.saveas",
+				"key": "alt+shift+s e"
+			}
 		],
 		"jsonValidation": [
 			{
 				"fileMatch": "/*.json",
-				"url": "https://raw.githubusercontent.com/serverlessworkflow/specification/master/schema/workflow.json"
+				"url": "https://serverlessworkflow.io/schemas/latest/workflow.json"
 			}
 		],
 		"snippets": [
@@ -108,7 +108,7 @@
 				"yaml.schemas": {
 					"type": "object",
 					"default": {
-						"https://raw.githubusercontent.com/serverlessworkflow/specification/master/schema/workflow.json": [
+						"https://serverlessworkflow.io/schemas/latest/workflow.json": [
 							"/*"
 						]
 					},
