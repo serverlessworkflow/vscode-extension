@@ -116,7 +116,7 @@
 				},
 				"swdiagram.diagramserviceurl": {
 					"type": "string",
-					"default": "diagram-service-mmagnani.apps.kogito-cloud.automation.rhmw.io",
+					"default": "https://serverlessworkflow.io/services/diagrams",
 					"description": "SW Diagram Service URL"
 				},
 				"swdiagram.transparencygrid": {

@@ -65,7 +65,7 @@ function getSvgData(url = '', datalength = 0, data = '', ctype = '') {
     resSvg = '';
     const options = {
         hostname: url,
-        path: '/swdiagram',
+        path: '',
         method: 'POST',
         headers: {
             'Content-Type': ctype,
