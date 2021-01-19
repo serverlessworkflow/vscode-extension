@@ -5,7 +5,7 @@ import { SvgWebviewManager } from '../features/svgWebviewManager';
 import { Configuration } from '../configuration';
 import { SvgDocumentContentProvider } from '../svgProvider';
 import { posix } from 'path';
-const http = require('http');
+const https = require('https');
 const fs = require('fs');
 
 var resSvg = '';
@@ -65,7 +65,7 @@ function getSvgData(url = '', datalength = 0, data = '', ctype = '') {
     resSvg = '';
     const options = {
         hostname: url,
-        path: '',
+        path: '/services/diagrams',
         method: 'POST',
         headers: {
             'Content-Type': ctype,
@@ -73,7 +73,7 @@ function getSvgData(url = '', datalength = 0, data = '', ctype = '') {
         }
     };
 
-    const req = http.request(options, res => {
+    const req = https.request(options, res => {
         console.log(`statusCode: ${res.statusCode}`)
 
         res.on('data', d => {
