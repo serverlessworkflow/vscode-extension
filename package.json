@@ -116,7 +116,7 @@
 				},
 				"swdiagram.diagramserviceurl": {
 					"type": "string",
-					"default": "https://serverlessworkflow.io/services/diagrams/generate",
+					"default": "https://serverlessworkflow.io/services/diagrams",
 					"description": "SW Diagram Service URL"
 				},
 				"swdiagram.transparencygrid": {
