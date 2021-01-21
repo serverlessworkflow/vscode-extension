@@ -2,7 +2,7 @@
 
 All notable changes for each release will be documented in this file.
 
-## Sep. 23 2020
+## Jan. 28 2020
 
 - Updated diagram generation service url
 ## Sep. 23 2020
