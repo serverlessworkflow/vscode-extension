@@ -2,7 +2,7 @@
 	"name": "serverless-workflow-vscode-extension",
 	"displayName": "Serverless Workflow VSCode Extension",
 	"description": "%description%",
-	"version": "1.4.0",
+	"version": "1.5.0",
 	"icon": "resources/serverlessworkflow-icon-color.png",
 	"publisher": "serverlessworkflow",
 	"author": "Serverless Workflow",
