@@ -11,7 +11,10 @@ Provides code hints and snippets for the [CNCF Serverless Workflow Specification
 
 ### Code Hints
 
-This extension provides Code Hints for JSON and YAML files in your project against the Serverless Workflow specification schema, including:
+This extension provides Code Hints, Snippets, and Diagram generation for Serverless Workflow definitions
+(JSON and YAML).
+
+Code hints include:
 
 - Prompting correct attribute names as you type.
 - Displaying of mismatched types or missing required properties
