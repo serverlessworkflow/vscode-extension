@@ -2,6 +2,11 @@
 
 Provides code hints and snippets for the [CNCF Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
 
+## Conformance
+
+This plugin conforms to the latest Serverless Workflow specification 
+release v0.6
+
 ## Features
 
 - [Code Hints](#Code-Hints)
