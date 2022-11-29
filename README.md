@@ -37,6 +37,11 @@ This extension also provides Code Snippets for the serverless workflow specifica
 - swy: Create a new YAML workflow definition
 - adding more in the next version
 
+## Requirements
+
+To generate the SVG diagram from the YAML file, you need to have the following tools installed:
+- https://www.graphviz.org/download/source/
+
 ### Diagram Generation
 
 You can generate the workflow diagram image in SVG format. While working on a workflow, you can preview it by:
