@@ -1,0 +1,15 @@
+{
+  "New YAML Workflow": {
+    "prefix": ["swy", "serverless-workflow-yaml"],
+    "body": [
+			"id: ${1:id}",
+			"name: ${2:name}",
+			"version: ${3:version}",
+			"functions: []",
+			"events: []",
+			"states: []"
+    ],
+    "description": "An empty Serverless Workflow"
+  },
+  
+}

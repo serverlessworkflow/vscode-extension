@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset=utf-8>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: https://cdn.jsdelivr.net;">
+    <title>Serverless Workflow Diagram Preview</title>
+  </head>
+  <body>
+    <div id="diagram-container"></div>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/+esm';
+      (async () => {
+        const vscode = acquireVsCodeApi();
+        const diagramContainerEl = document.getElementById('diagram-container');
+        
+        function updateState(partialState) {
+          vscode.setState({
+            ...vscode.getState(),
+            ...partialState
+          });
+        }
+        
+        async function updateDiagram({ graphDefinition }) {
+          try {
+            const { svg, bindFunctions } = await mermaid.render('sw-diagram', graphDefinition);
+            diagramContainerEl.innerHTML = svg;
+            vscode.postMessage({
+              command: 'diagram-rendered',
+              svg: diagramContainerEl.innerHTML
+            });
+            updateState({ graphDefinition });
+          }
+          catch (error) {
+            console.error('Error detecting graph type or rendering graph', error);
+          }
+        }
+
+        function generatePng() {
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          const svgBox = diagramContainerEl.querySelector('svg').getBoundingClientRect();
+          canvas.setAttribute('width', svgBox.width + 'px');
+          canvas.setAttribute('height', svgBox.height + 'px');
+          canvas.setAttribute('style', 'display: none;');
+          const img = new Image(svgBox.width, svgBox.height);
+          img.onload = () => {
+            context.drawImage(img, 0, 0, img.width, img.height);
+            const png = canvas.toDataURL('image/png', 1).replace(/.*base64,/, '');
+            vscode.postMessage({
+              command: 'png-generated',
+              png
+            });
+            document.body.removeChild(diagramContainerEl);
+          };
+          const svg = diagramContainerEl.innerHTML;
+          const base64 = btoa(unescape(encodeURIComponent(svg)));
+          diagramContainerEl.appendChild(canvas);
+          img.src = `data:image/svg+xml;charset=utf-8;base64,${base64}`;
+        }
+        
+        window.addEventListener('message', async (event) => {
+          const { command, ...args } = event.data;
+          switch (command) {
+            case 'update-diagram':
+              await updateDiagram(args);
+              break;
+            case 'generate-png':
+              generatePng(args);
+              break;
+          }
+        });
+        
+        mermaid.initialize({
+          startOnLoad: false
+        });
+        
+        const state = vscode.getState();
+        if (state?.graphDefinition) {
+          await updateDiagram({ graphDefinition: state.graphDefinition });
+        }
+      })();
+    </script>
+  </body>
+</html>

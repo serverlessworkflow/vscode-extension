@@ -1,42 +1,61 @@
+'use strict';
+
 import * as vscode from 'vscode';
-import { SvgDocumentContentProvider } from './svgProvider';
-import { CommandManager } from './commandManager';
-import { ShowPreviewCommand } from './commands/showPreview';
+import * as path from 'path';
+import { DiagramPanel, DiagramPanelMode } from './diagram-panel';
 
-import exec = require('child_process');
-import fs = require('pn/fs');
-import path = require('path');
-import phantomjs = require('phantomjs-prebuilt');
-import { SvgWebviewManager, SvgExportWebviewManager } from './features/svgWebviewManager';
-import { SaveAsCommand, SaveAsSizeCommand, CopyDataUriCommand } from './commands/saveFile';
-import { ExportDocumentContentProvider } from './exportProvider';
-import { ShowExportCommand } from './commands/exportByCanvas';
+const supportedExtensions = [ '.json', '.yml', '.yaml' ];
 
-export function activate(context: vscode.ExtensionContext) {
-    const previewProvider = new SvgDocumentContentProvider(context);
-    const webviewManager = new SvgWebviewManager(previewProvider);
-    context.subscriptions.push(webviewManager);
-    const exportProvider = new ExportDocumentContentProvider(context);
-    const expWebviewManager = new SvgExportWebviewManager(exportProvider);
-    context.subscriptions.push(expWebviewManager);
-    const commandManager = new CommandManager();
-    commandManager.register(new ShowPreviewCommand(webviewManager));
-    commandManager.register(new ShowExportCommand(expWebviewManager));
-    commandManager.register(new SaveAsCommand());
-    commandManager.register(new SaveAsSizeCommand());
-    commandManager.register(new CopyDataUriCommand());
-    context.subscriptions.push(commandManager);
-
-    // Check PhantomJS Binary
-    if (!fs.existsSync(phantomjs.path)) {
-        exec.execSync('npm rebuild', { cwd: context.extensionPath });
-        process.env.PHANTOMJS_PLATFORM = process.platform;
-        process.env.PHANTOMJS_ARCH = process.arch;
-        phantomjs.path = process.platform === 'win32' ?
-            path.join(path.dirname(phantomjs.path), 'phantomjs.exe') :
-            path.join(path.dirname(phantomjs.path), 'phantom', 'bin', 'phantomjs');
-    }
+async function handleDiagramCommand(context: vscode.ExtensionContext, mode: DiagramPanelMode, selectionSource?: vscode.Uri, selectedItems?: vscode.Uri[]): Promise<void> {
+	let title: string = 'Loading';
+	switch (mode) {
+		case 'preview':
+			title = 'Generating diagram...';
+			break;
+		case 'svg':
+			title = 'Generating SVG...';
+			break;
+		case 'png':
+			title = 'Generating PNG...';
+			break;
+	}
+	vscode.window.withProgress({
+    location: vscode.ProgressLocation.Window,
+    cancellable: false,
+    title
+	}, async() => {
+	if (selectionSource && selectedItems) {
+		for (let item of selectedItems) {
+			const ext = path.extname(item.fsPath);
+			if (supportedExtensions.includes(ext)) {
+				const target = await vscode.workspace.openTextDocument(item);
+				const diagramPanel = new DiagramPanel(context, { mode });
+				diagramPanel.preview(target!);
+			}
+		}
+		return;
+	}
+	else {
+		const target = vscode.window.activeTextEditor?.document;
+		if (target) {
+			const diagramPanel = new DiagramPanel(context, { mode });
+			diagramPanel.preview(target);
+		}
+		return;
+	}
+});
 }
 
-export function deactivate() {
+export function activate(context: vscode.ExtensionContext) {
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('serverlessWorkflow.diagram.preview', handleDiagramCommand.bind(null, context, 'preview'))
+  );
+  context.subscriptions.push(
+    vscode.commands.registerCommand('serverlessWorkflow.diagram.svg', handleDiagramCommand.bind(null, context, 'svg'))
+  );
+  context.subscriptions.push(
+    vscode.commands.registerCommand('serverlessWorkflow.diagram.png', handleDiagramCommand.bind(null, context, 'png'))
+  );
+
 }
