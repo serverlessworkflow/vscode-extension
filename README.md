@@ -1,71 +1,96 @@
-# serverless-workflow README
+# Serverless Workflow Specification - VSCode Extension
 
-This is the README for your extension "serverless-workflow". After writing up a brief description, we recommend including the following sections.
+Provides code hints and snippets for the [CNCF Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
+
+## Conformance
+
+This plugin conforms to the latest [Serverless Workflow specification](https://serverlessworkflow.io/schemas/latest/workflow.json).
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- [Code Hints](#Code-Hints)
+- [Code Snippets](#Code-Snippets)
+- [Preview Workflow Diagram](#Preview-Workflow-Diagram)
+- [Exporting Diagram to SVG or PNG](#Exporting-Diagram-to-PNG)
 
-For example if there is an image subfolder under your extension project workspace:
+### Code Hints
 
-\!\[feature X\]\(images/feature-x.png\)
+This extension provides Code Hints, Snippets, and Diagram generation for Serverless Workflow definitions
+(JSON and YAML).
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+Code hints include:
 
-## Requirements
+- Prompting correct attribute names as you type.
+- Displaying of mismatched types or missing required properties
+- Allows use of Ctrl+Space to show available properties
+- Code completion for enum types
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Note that to enable the YAML code completion support, you must
+install the [VSCode YAML extension](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) first.
 
-## Extension Settings
+### Code Snippets
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+This extension also provides Code Snippets for the serverless workflow specification markup:
 
-For example:
+- swj: Create a new JSON workflow definition
+- swy: Create a new YAML workflow definition
+- adding more in the next version
 
-This extension contributes the following settings:
+### Preview Workflow Diagram
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+You can preview the workflow diagram while working on a workflow:
 
-## Known Issues
+- Opening the Command Palette (⇧⌘P or Ctrl + Shift + P)
+- Selecting: "Serverless Workflow: Preview Diagram"
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Or by using the hotkey `alt+shift+s p`
 
-## Release Notes
+You can also generate a preview for multiple files by selecting them in the explorer, right-click and select from the menu "Serverless Workflow: Preview Diagram"
 
-Users appreciate release notes as you update your extension.
+### Exporting Diagram to SVG or PNG
 
-### 1.0.0
+Similarly to the preview, you can output the diagram to either SVG or PNG format.
 
-Initial release of ...
+The commands are "Serverless Workflow: Export Diagram to SVG" (`alt+shift+s v`) or "Serverless Workflow: Export Diagram to PNG" (`alt+shift+s i`), available in the command palette or by right clicking the files.
 
-### 1.0.1
 
-Fixed issue #.
+## Building from source
 
-### 1.1.0
+If you do not want to get this extension from the Marketplace or would like to build and test the latest changes/updates locally, follow these steps:
 
-Added features X, Y, and Z.
+1. Clone the extension git repository
 
----
+``` text
+git clone https://github.com/serverlessworkflow/vscode-extension.git
+cd vscode-extension
+```
 
-## Following extension guidelines
+2. Build the necessary modules
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+``` text
+npm install
+```
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+3. Build and package the extension with `vsce`:
 
-## Working with Markdown
+```shell
+vsce package
+```
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+To install `vsce` run:
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+```shell
+npm install -g vsce
+```
 
-## For more information
+4. `vsce` will create a `serverless-workflow-vscode-extension-$VERSION$.vsix` file which you have to install to your ide, for this run:
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+```shell
+code --install-extension serverless-workflow-vscode-extension-$VERSION$.vsix
+```
 
-**Enjoy!**
+To uninstall the extension run:
+
+```shell
+code --uninstall-extension serverless-workflow-vscode-extension-$VERSION$.vsix
+```

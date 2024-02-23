@@ -25,7 +25,7 @@
     "commands": [
       {
         "command": "serverlessWorkflow.diagram.preview",
-        "title": "Serverless Workflow: Show Diagram Preview"
+        "title": "Serverless Workflow: Preview Diagram"
       },
       {
         "command": "serverlessWorkflow.diagram.svg",
@@ -92,7 +92,7 @@
 				"key": "alt+shift+s v"
 			},
 			{
-				"command": "serverlessWorkflow.diagram.svg",
+				"command": "serverlessWorkflow.diagram.png",
 				"key": "alt+shift+s i"
 			}
 		]
