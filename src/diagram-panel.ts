@@ -97,23 +97,28 @@ export class DiagramPanel {
     if (panelContent) {
       return;
     }
-    const fileUri = vscode.Uri.file(path.join(this.#context.extensionPath, 'resources', 'diagram-panel.html'));
-    const fileContent = await vscode.workspace.fs.readFile(fileUri);
+    const panelFileUri = vscode.Uri.file(path.join(this.#context.extensionPath, 'resources', 'diagram-panel.html'));
+    const panelSourceContent = await vscode.workspace.fs.readFile(panelFileUri);
     const decoder = new TextDecoder('utf-8');
-    panelContent = decoder.decode(fileContent);
+    panelContent = decoder.decode(panelSourceContent);
   }
 
   #getFileDestination(): vscode.Uri | undefined {
     if (!this.#target) {
       return;
     }
-    const targetPath = this.#target.uri.fsPath;    
-    const targetDirectory = path.dirname(targetPath);
+    const targetPath = this.#target.uri.fsPath || this.#target.uri.path;
+    const targetDirectory = targetPath.includes(path.sep) ? path.dirname(targetPath) : vscode.workspace.workspaceFolders?.[0].uri.fsPath;
+    if (!targetDirectory) {
+      return;
+    }
     const targetFile = path.basename(targetPath);
     const targetExt = path.extname(targetFile);
+    const destinationExt = '.' + this.#mode;
+    const destinationFile = !targetExt ? targetFile + destinationExt : targetFile.replace(targetExt, destinationExt);
     const destination = vscode.Uri.file(path.join(
       targetDirectory,
-      targetFile.replace(targetExt, '.' + this.#mode)
+      destinationFile
     ));
     return destination;
   }
@@ -131,9 +136,14 @@ export class DiagramPanel {
         else if (this.#mode === 'svg') {
           const { svg } = args;
           const buffer = Buffer.from(svg, 'utf8');
-          const destination = this.#getFileDestination();
+          let destination = this.#getFileDestination();
           if (!destination) {
-            throw new Error('Missing destination'); // todo: ask for destination
+            destination = await vscode.window.showSaveDialog({ filters: { '.svg': ['svg'] }});
+            if (!destination) {
+              vscode.window.showWarningMessage('Cannot determine the destination, skipping export.');
+              this.dispose();
+              return;
+            }
           }
           await vscode.workspace.fs.writeFile(destination, buffer);
           this.dispose();
@@ -143,9 +153,14 @@ export class DiagramPanel {
       case 'png-generated': {
         const { png } = args;        
         const buffer = Buffer.from(png, 'base64');
-        const destination = this.#getFileDestination();
+        let destination = this.#getFileDestination();
         if (!destination) {
-          throw new Error('Missing destination'); // todo: ask for destination
+          destination = await vscode.window.showSaveDialog({ filters: { '.png': ['png'] }});
+          if (!destination) {
+            vscode.window.showWarningMessage('Cannot determine the destination, skipping export.');
+            this.dispose();
+            return;
+          }
         }
         await vscode.workspace.fs.writeFile(destination, buffer);
         this.dispose();
