@@ -27,7 +27,7 @@
           try {
             const { svg, bindFunctions } = await mermaid.render('sw-diagram', graphDefinition);
             diagramContainerEl.innerHTML = svg;
-            vscode.postMessage({
+            await vscode.postMessage({
               command: 'diagram-rendered',
               svg: diagramContainerEl.innerHTML
             });
@@ -46,18 +46,22 @@
           canvas.setAttribute('height', svgBox.height + 'px');
           canvas.setAttribute('style', 'display: none;');
           const img = new Image(svgBox.width, svgBox.height);
-          img.onload = () => {
+          img.onerror = (err) => {
+            console.error('There was an error loading the SVG as base64.');
+          };
+          img.onload = async () => {
             context.drawImage(img, 0, 0, img.width, img.height);
             const png = canvas.toDataURL('image/png', 1).replace(/.*base64,/, '');
-            vscode.postMessage({
+            await vscode.postMessage({
               command: 'png-generated',
               png
             });
             document.body.removeChild(diagramContainerEl);
           };
-          const svg = diagramContainerEl.innerHTML;
+          const svg = new XMLSerializer().serializeToString(diagramContainerEl.firstChild);
           const base64 = btoa(unescape(encodeURIComponent(svg)));
           diagramContainerEl.appendChild(canvas);
+          diagramContainerEl.appendChild(img);
           img.src = `data:image/svg+xml;charset=utf-8;base64,${base64}`;
         }
         

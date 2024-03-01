@@ -78,15 +78,7 @@ export class DiagramPanel {
       return;
     }
     this.#panel.webview.html = panelContent;
-    this.#updateDiagram();
-  }
-
-  async generateSvg(target: vscode.TextDocument): Promise<void> {
-    await this.preview(target);
-  }
-
-  async generatePng(target: vscode.TextDocument): Promise<void> {
-    await this.preview(target);
+    await this.#updateDiagram();
   }
 
   dispose() {
@@ -128,7 +120,7 @@ export class DiagramPanel {
     switch (command) {
       case 'diagram-rendered': {
         if (this.#mode === 'png') {
-          this.#panel?.webview.postMessage({
+          await this.#panel?.webview.postMessage({
             command: 'generate-png'
           });
           return;
@@ -140,7 +132,7 @@ export class DiagramPanel {
           if (!destination) {
             destination = await vscode.window.showSaveDialog({ filters: { '.svg': ['svg'] }});
             if (!destination) {
-              vscode.window.showWarningMessage('Cannot determine the destination, skipping export.');
+              await vscode.window.showWarningMessage('Cannot determine the destination, skipping export.');
               this.dispose();
               return;
             }
@@ -157,7 +149,7 @@ export class DiagramPanel {
         if (!destination) {
           destination = await vscode.window.showSaveDialog({ filters: { '.png': ['png'] }});
           if (!destination) {
-            vscode.window.showWarningMessage('Cannot determine the destination, skipping export.');
+            await vscode.window.showWarningMessage('Cannot determine the destination, skipping export.');
             this.dispose();
             return;
           }
@@ -169,7 +161,7 @@ export class DiagramPanel {
     }
   }
 
-  #updateDiagram(): void {
+  async #updateDiagram(): Promise<void> {
     if (!this.#panel) {
       console.warn('No active diagram panel.');
       return;
@@ -196,13 +188,13 @@ export class DiagramPanel {
       console.warn('Failed to build graph definition');
       return;
     }
-    this.#panel.webview.postMessage({
-      command: 'update-diagram',
-      graphDefinition
-    });
     if (!this.#panel.visible) {
       this.#panel.reveal(undefined, true);
     }
+    await this.#panel.webview.postMessage({
+      command: 'update-diagram',
+      graphDefinition
+    });
   }
 
 }
