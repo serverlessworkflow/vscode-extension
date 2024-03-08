@@ -78,7 +78,6 @@ export class DiagramPanel {
       return;
     }
     this.#panel.webview.html = panelContent;
-    await this.#updateDiagram();
   }
 
   dispose() {
@@ -137,6 +136,9 @@ export class DiagramPanel {
   async #onPanelReceiveMessage(message: any): Promise<void> {    
     const { command, ...args } = message;
     switch (command) {
+      case 'panel-content-loaded':
+        await this.#updateDiagram();
+        break;
       case 'diagram-rendered': {
         if (this.#mode === 'png') {
           await this.#panel?.webview.postMessage({

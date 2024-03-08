@@ -11,10 +11,15 @@
   <body>
     <div id="diagram-container"></div>
     <script type="module">
+      const vscode = acquireVsCodeApi();
+      window.addEventListener('load', async() => {
+        await vscode.postMessage({
+          command: 'panel-content-loaded'
+        })
+      });
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/+esm';
       (async () => {
         try {
-          const vscode = acquireVsCodeApi();
           const diagramContainerEl = document.getElementById('diagram-container');
           
           function updateState(partialState) {
