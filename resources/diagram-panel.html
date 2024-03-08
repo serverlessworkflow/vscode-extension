@@ -13,77 +13,90 @@
     <script type="module">
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/+esm';
       (async () => {
-        const vscode = acquireVsCodeApi();
-        const diagramContainerEl = document.getElementById('diagram-container');
-        
-        function updateState(partialState) {
-          vscode.setState({
-            ...vscode.getState(),
-            ...partialState
-          });
-        }
-        
-        async function updateDiagram({ graphDefinition }) {
-          try {
-            const { svg, bindFunctions } = await mermaid.render('sw-diagram', graphDefinition);
-            diagramContainerEl.innerHTML = svg;
-            await vscode.postMessage({
-              command: 'diagram-rendered',
-              svg: diagramContainerEl.innerHTML
+        try {
+          const vscode = acquireVsCodeApi();
+          const diagramContainerEl = document.getElementById('diagram-container');
+          
+          function updateState(partialState) {
+            vscode.setState({
+              ...vscode.getState(),
+              ...partialState
             });
-            updateState({ graphDefinition });
           }
-          catch (error) {
-            console.error('Error detecting graph type or rendering graph', error);
+          
+          async function updateDiagram({ graphDefinition }) {
+            try {
+              const { svg, bindFunctions } = await mermaid.render('sw-diagram', graphDefinition);
+              diagramContainerEl.innerHTML = svg;
+              const sanitizedSvg = new XMLSerializer().serializeToString(diagramContainerEl.firstChild);
+              await vscode.postMessage({
+                command: 'diagram-rendered',
+                svg: sanitizedSvg
+              });
+              updateState({ graphDefinition });
+            }
+            catch (ex) {
+              await vscode.postMessage({
+                command: 'rendering-exception',
+                ex
+              });
+              console.error('Error detecting graph type or rendering graph', ex);
+            }
           }
-        }
 
-        function generatePng() {
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          const svgBox = diagramContainerEl.querySelector('svg').getBoundingClientRect();
-          canvas.setAttribute('width', svgBox.width + 'px');
-          canvas.setAttribute('height', svgBox.height + 'px');
-          canvas.setAttribute('style', 'display: none;');
-          const img = new Image(svgBox.width, svgBox.height);
-          img.onerror = (err) => {
-            console.error('There was an error loading the SVG as base64.');
-          };
-          img.onload = async () => {
-            context.drawImage(img, 0, 0, img.width, img.height);
-            const png = canvas.toDataURL('image/png', 1).replace(/.*base64,/, '');
-            await vscode.postMessage({
-              command: 'png-generated',
-              png
-            });
-            document.body.removeChild(diagramContainerEl);
-          };
-          const svg = new XMLSerializer().serializeToString(diagramContainerEl.firstChild);
-          const base64 = btoa(unescape(encodeURIComponent(svg)));
-          diagramContainerEl.appendChild(canvas);
-          diagramContainerEl.appendChild(img);
-          img.src = `data:image/svg+xml;charset=utf-8;base64,${base64}`;
-        }
-        
-        window.addEventListener('message', async (event) => {
-          const { command, ...args } = event.data;
-          switch (command) {
-            case 'update-diagram':
-              await updateDiagram(args);
-              break;
-            case 'generate-png':
-              generatePng(args);
-              break;
+          function generatePng() {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            const svgBox = diagramContainerEl.querySelector('svg').getBoundingClientRect();
+            canvas.setAttribute('width', svgBox.width + 'px');
+            canvas.setAttribute('height', svgBox.height + 'px');
+            canvas.setAttribute('style', 'display: none;');
+            const img = new Image(svgBox.width, svgBox.height);
+            img.onerror = (err) => {
+              console.error('There was an error loading the SVG as base64.');
+            };
+            img.onload = async () => {
+              context.drawImage(img, 0, 0, img.width, img.height);
+              const png = canvas.toDataURL('image/png', 1).replace(/.*base64,/, '');
+              await vscode.postMessage({
+                command: 'png-generated',
+                png
+              });
+              document.body.removeChild(diagramContainerEl);
+            };
+            const svg = new XMLSerializer().serializeToString(diagramContainerEl.firstChild);
+            const base64 = btoa(unescape(encodeURIComponent(svg)));
+            diagramContainerEl.appendChild(canvas);
+            diagramContainerEl.appendChild(img);
+            img.src = `data:image/svg+xml;charset=utf-8;base64,${base64}`;
           }
-        });
-        
-        mermaid.initialize({
-          startOnLoad: false
-        });
-        
-        const state = vscode.getState();
-        if (state?.graphDefinition) {
-          await updateDiagram({ graphDefinition: state.graphDefinition });
+          
+          window.addEventListener('message', async (event) => {
+            const { command, ...args } = event.data;
+            switch (command) {
+              case 'update-diagram':
+                await updateDiagram(args);
+                break;
+              case 'generate-png':
+                generatePng(args);
+                break;
+            }
+          });
+          
+          mermaid.initialize({
+            startOnLoad: false
+          });
+          
+          const state = vscode.getState();
+          if (state?.graphDefinition) {
+            await updateDiagram({ graphDefinition: state.graphDefinition });
+          }
+        }
+        catch (ex) {
+          await vscode.postMessage({
+            command: 'general-exception',
+            ex
+          });
         }
       })();
     </script>

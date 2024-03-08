@@ -63,7 +63,7 @@ export class DiagramPanel {
     return this.#disposeEventEmitter.event;
   }
   
-  async preview(target: vscode.TextDocument): Promise<void> {
+  async render(target: vscode.TextDocument): Promise<void> {
     if (!this.#panel) {
       console.warn('No active diagram panel.');
       return;
@@ -115,6 +115,25 @@ export class DiagramPanel {
     return destination;
   }
 
+  async #saveToFile(buffer: Buffer): Promise<void> {
+    try {
+      let destination = this.#getFileDestination();
+      if (!destination) {
+        destination = await vscode.window.showSaveDialog({ filters: { ['.' + this.#mode] : [this.#mode] }});
+        if (!destination) {
+          await vscode.window.showWarningMessage('Cannot determine the destination, skipping export.');
+          this.dispose();
+          return;
+        }
+      }
+      await vscode.workspace.fs.writeFile(destination, buffer);
+    }
+    catch (ex) {
+      await vscode.window.showErrorMessage(`Unable to save diagram to file: ${JSON.stringify(ex)}`);
+    }
+    this.dispose();
+  }
+
   async #onPanelReceiveMessage(message: any): Promise<void> {    
     const { command, ...args } = message;
     switch (command) {
@@ -128,35 +147,21 @@ export class DiagramPanel {
         else if (this.#mode === 'svg') {
           const { svg } = args;
           const buffer = Buffer.from(svg, 'utf8');
-          let destination = this.#getFileDestination();
-          if (!destination) {
-            destination = await vscode.window.showSaveDialog({ filters: { '.svg': ['svg'] }});
-            if (!destination) {
-              await vscode.window.showWarningMessage('Cannot determine the destination, skipping export.');
-              this.dispose();
-              return;
-            }
-          }
-          await vscode.workspace.fs.writeFile(destination, buffer);
-          this.dispose();
+          await this.#saveToFile(buffer);
         }
         break;
       }
       case 'png-generated': {
         const { png } = args;        
         const buffer = Buffer.from(png, 'base64');
-        let destination = this.#getFileDestination();
-        if (!destination) {
-          destination = await vscode.window.showSaveDialog({ filters: { '.png': ['png'] }});
-          if (!destination) {
-            await vscode.window.showWarningMessage('Cannot determine the destination, skipping export.');
-            this.dispose();
-            return;
-          }
-        }
-        await vscode.workspace.fs.writeFile(destination, buffer);
-        this.dispose();
+        await this.#saveToFile(buffer);
         break;
+      }
+      case 'rendering-exception':
+      case 'general-exception':
+      {
+        const { ex } = args;
+        await vscode.window.showErrorMessage(`An error occured while processing the workflow: ${JSON.stringify(ex)}`)
       }
     }
   }
@@ -182,10 +187,12 @@ export class DiagramPanel {
     }
     catch (ex) {
       console.warn('An exception occured while parsing the workflow or generating its diagram.', ex);
+      await vscode.window.showErrorMessage(`The ServerlessWorkflow SDK couldn't process the workflow: ${ex}`);
       return;
     }
     if (!graphDefinition) {
       console.warn('Failed to build graph definition');
+      await vscode.window.showErrorMessage(`The ServerlessWorkflow SDK generated an empty diagram.`);
       return;
     }
     if (!this.#panel.visible) {

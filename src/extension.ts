@@ -30,7 +30,7 @@ async function handleDiagramCommand(context: vscode.ExtensionContext, mode: Diag
 			if (supportedExtensions.includes(ext)) {
 				const target = await vscode.workspace.openTextDocument(item);
 				const diagramPanel = new DiagramPanel(context, { mode });
-				diagramPanel.preview(target!);
+				diagramPanel.render(target!);
 			}
 		}
 		return;
@@ -39,7 +39,7 @@ async function handleDiagramCommand(context: vscode.ExtensionContext, mode: Diag
 		const target = vscode.window.activeTextEditor?.document;
 		if (target) {
 			const diagramPanel = new DiagramPanel(context, { mode });
-			diagramPanel.preview(target);
+			diagramPanel.render(target);
 		}
 		return;
 	}
