@@ -4,15 +4,14 @@ Provides code hints and snippets for the [CNCF Serverless Workflow Specification
 
 ## Conformance
 
-This plugin conforms to the latest Serverless Workflow specification 
-release v0.6
+This plugin conforms to the latest [Serverless Workflow specification](https://serverlessworkflow.io/schemas/latest/workflow.json).
 
 ## Features
 
 - [Code Hints](#Code-Hints)
 - [Code Snippets](#Code-Snippets)
-- [Diagram Generation](#Diagram-Generation)
-- [Exporting Diagram to PNG](#Exporting-Diagram-to-PNG)
+- [Preview Workflow Diagram](#Preview-Workflow-Diagram)
+- [Exporting Diagram to SVG or PNG](#Exporting-Diagram-to-PNG)
 
 ### Code Hints
 
@@ -37,20 +36,23 @@ This extension also provides Code Snippets for the serverless workflow specifica
 - swy: Create a new YAML workflow definition
 - adding more in the next version
 
-### Diagram Generation
+### Preview Workflow Diagram
 
-You can generate the workflow diagram image in SVG format. While working on a workflow, you can preview it by:
+You can preview the workflow diagram while working on a workflow:
 
 - Opening the Command Palette (⇧⌘P or Ctrl + Shift + P)
-- Selecting: "Serverless Workflow: Generate Diagram"
+- Selecting: "Serverless Workflow: Preview Diagram"
 
-It will generate the workflow diagram SVG and present it side-by-side to your workflow source file. It will also create a `myworkflow.svg` file in the same directory as your workflow model. `myworkflow` is the name of your workflow model file (JSON or YAML).
+Or by using the hotkey `alt+shift+s p`
 
-### Exporting Diagram to PNG
+You can also generate a preview for multiple files by selecting them in the explorer, right-click and select from the menu "Serverless Workflow: Preview Diagram"
 
-Once you have generated the workflow diagram (see the section above), you can right-click on your workflow model file and select from the menu "Serverless Workflow: Export Diagram to PNG”.
+### Exporting Diagram to SVG or PNG
 
-Doing this will convert the workflow diagram to PNG and create a `myworkflow.png` file in the same directory as your workflow model.
+Similarly to the preview, you can output the diagram to either SVG or PNG format.
+
+The commands are "Serverless Workflow: Export Diagram to SVG" (`alt+shift+s v`) or "Serverless Workflow: Export Diagram to PNG" (`alt+shift+s i`), available in the command palette or by right clicking the files.
+
 
 ## Building from source
 

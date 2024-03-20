@@ -1,203 +1,124 @@
 {
-	"name": "serverless-workflow-vscode-extension",
-	"displayName": "Serverless Workflow VSCode Extension",
-	"description": "%description%",
-	"version": "1.5.0",
-	"icon": "resources/serverlessworkflow-icon-color.png",
-	"publisher": "serverlessworkflow",
-	"author": "Serverless Workflow",
-	"license": "Apache-2.0",
-	"engines": {
-		"vscode": "^1.37.0"
-	},
-	"keywords": [
-		"serverless",
-		"workflow",
-		"validation",
-		"snippets",
-		"json",
-		"yaml",
-		"schema"
-	],
-	"categories": [
-		"Snippets",
-		"Other"
-	],
-	"bugs": {
-		"url": "https://github.com/serverlessworkflow/vscode-extension/issues"
-	},
-	"homepage": "https://serverlessworkflow.io",
-	"readmeFilename": "README.md",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/serverlessworkflow/vscode-extension.git"
-	},
-	"activationEvents": [
-		"onLanguage:json",
-		"onLanguage:yaml",
-		"onCommand:swdiagram.open",
-		"onWebviewPanel:svg.preview",
-		"*"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "swdiagram.open",
-				"title": "Serverless Workflow: Generate Diagram",
-				"icon": {
-					"light": "./media/preview-darkgray.svg",
-					"dark": "./media/preview-lightgray.svg"
-				}
-			},
-			{
-				"command": "swdiagram.saveas",
-				"title": "Serverless Workflow: Export Diagram to PNG"
-			}
-		],
-		"menus": {
-			"editor/title": [
-				{
-					"when": "editorLangId == json || editorLangId == yaml",
-					"command": "swdiagram.open",
-					"group": "navigation"
-				}
-			],
-			"explorer/context": [
-				{
-					"command": "swdiagram.open",
-					"group": "extension",
-					"when": "resourceLangId  == json || resourceLangId == yaml"
-				},
-				{
-					"command": "swdiagram.saveas",
-					"group": "extension",
-					"when": "resourceLangId  == json || resourceLangId == yaml"
-				}
-			]
-		},
-		"keybindings": [
-			{
-				"command": "swdiagram.open",
-				"key": "alt+shift+s o"
-			},
-			{
-				"command": "svgviewer.saveas",
-				"key": "alt+shift+s e"
-			}
-		],
+  "name": "serverless-workflow",
+  "displayName": "Serverless Workflow",
+  "description": "",
+  "version": "2.0.0",
+  "engines": {
+    "vscode": "^1.86.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:serverlessWorkflow.diagram.preview",
+    "onCommand:serverlessWorkflow.diagram.svg",
+    "onCommand:serverlessWorkflow.diagram.png"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
 		"jsonValidation": [
 			{
-				"fileMatch": "/*.json",
+				"fileMatch": ["*.json", "*.yml", "*.yaml"],
 				"url": "https://serverlessworkflow.io/schemas/latest/workflow.json"
 			}
 		],
-		"snippets": [
+    "commands": [
+      {
+        "command": "serverlessWorkflow.diagram.preview",
+        "title": "Serverless Workflow: Preview Diagram"
+      },
+      {
+        "command": "serverlessWorkflow.diagram.svg",
+        "title": "Serverless Workflow: Export Diagram to SVG"
+      },
+      {
+        "command": "serverlessWorkflow.diagram.png",
+        "title": "Serverless Workflow: Export Diagram to PNG"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceLangId  == json || resourceLangId == yaml",
+          "command": "serverlessWorkflow.diagram.preview",
+          "group": "2_workspace"
+        },
+        {
+          "when": "resourceLangId  == json || resourceLangId == yaml",
+          "command": "serverlessWorkflow.diagram.svg",
+          "group": "2_workspace"
+        },
+        {
+          "when": "resourceLangId  == json || resourceLangId == yaml",
+          "command": "serverlessWorkflow.diagram.png",
+          "group": "2_workspace"
+        }
+      ],
+			"editor/context": [
+        {
+          "when": "resourceLangId  == json || resourceLangId == yaml",
+          "command": "serverlessWorkflow.diagram.preview",
+          "group": "2_workspace"
+        },
+        {
+          "when": "resourceLangId  == json || resourceLangId == yaml",
+          "command": "serverlessWorkflow.diagram.svg",
+          "group": "2_workspace"
+        },
+        {
+          "when": "resourceLangId  == json || resourceLangId == yaml",
+          "command": "serverlessWorkflow.diagram.png",
+          "group": "2_workspace"
+        }
+			]
+    },
+    "snippets": [
+      {
+        "language": "json",
+        "path": "./snippets/serverless-workflow.json.code-snippets"
+      },
+      {
+        "language": "yaml",
+        "path": "./snippets/serverless-workflow.yaml.code-snippets"
+      }
+    ],
+		"keybindings": [
 			{
-				"language": "json",
-				"path": "./snippetsjson.json"
+				"command": "serverlessWorkflow.diagram.preview",
+				"key": "alt+shift+s p"
 			},
 			{
-				"language": "yaml",
-				"path": "./snippetsyaml.json"
+				"command": "serverlessWorkflow.diagram.svg",
+				"key": "alt+shift+s v"
+			},
+			{
+				"command": "serverlessWorkflow.diagram.png",
+				"key": "alt+shift+s i"
 			}
-		],
-		"configuration": {
-			"title": "VSCode Serverless Workflow configuration",
-			"properties": {
-				"yaml.schemas": {
-					"type": "object",
-					"default": {
-						"https://serverlessworkflow.io/schemas/latest/workflow.json": [
-							"/*"
-						]
-					},
-					"description": "Associate Workflow Schema"
-				},
-				"swdiagram.diagramserviceurl": {
-					"type": "string",
-					"default": "serverlessworkflow.io",
-					"description": "SW Diagram Service Host (must be secured)"
-				},
-				"swdiagram.transparencygrid": {
-					"type": "boolean",
-					"default": true,
-					"description": "Show Transparency Grid"
-				},
-				"swdiagram.transparencycolor": {
-					"type": "string",
-					"default": null,
-					"description": "Color setting for transparency"
-				},
-				"swdiagram.enableautopreview": {
-					"type": "boolean",
-					"default": false,
-					"description": "Open or not open the preview screen automatically"
-				},
-				"swdiagram.previewcolumn": {
-					"type": "string",
-					"enum": [
-						"Active",
-						"Beside"
-					],
-					"default": "Beside",
-					"description": "How to open the screen (vscode.ViewColumn)"
-				},
-				"swdiagram.showzoominout": {
-					"type": "boolean",
-					"default": false,
-					"description": "Show zoom in/out button in preview windows"
-				},
-				"swdiagram.autoInsertNamespace": {
-					"type": "boolean",
-					"default": true,
-					"description": "If SVG namespace doesn't exist in a file, it will be added automatically"
-				}
-			}
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"test": "npm run compile"
-	},
-	"devDependencies": {
-		"@types/fs-extra": "^4.0.8",
-		"@types/get-port": "^4.0.1",
-		"@types/md5": "^2.1.33",
-		"@types/minimatch": "^3.0.3",
-		"@types/node": "^8.10.40",
-		"@types/xml2js": "^0.4.3",
-		"elliptic": "^6.5.3",
-		"kind-of": ">=6.0.3",
-		"minimist": ">=1.2.3",
-		"ts-loader": "^4.4.2",
-		"tslint": "^5.13.0",
-		"typescript": "^2.9.2",
-		"vscode": "^1.1.33"
-	},
-	"dependencies": {
-		"@types/lodash": "^4.14.136",
-		"copy-paste": "^1.3.0",
-		"fast-glob": "^2.2.4",
-		"fs-extra": "^4.0.3",
-		"get-port": "^4.2.0",
-		"jquery": "^3.3.1",
-		"kind-of": ">=6.0.3",
-		"lodash": "^4.17.1",
-		"md5": "^2.2.1",
-		"minimatch": "^3.0.4",
-		"minimist": ">=1.2.3",
-		"path": "^0.12.7",
-		"phantomjs": "^2.1.7",
-		"phantomjs-prebuilt": "^2.1.16",
-		"pn": "^1.1.0",
-		"request": "^2.88.2",
-		"serialize-javascript": "^2.1.2",
-		"svgexport": "^0.3.2",
-		"tmp": "0.0.33",
-		"xml-zero-lexer": "^2.0.5",
-		"xml2js": "^0.4.19"
-	}
+		]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.86.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@severlessworkflow/sdk-typescript": "^3.0.3",
+    "mermaid": "^10.8.0",
+    "npm": "^10.4.0"
+  }
 }

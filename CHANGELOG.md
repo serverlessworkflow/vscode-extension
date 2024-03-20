@@ -2,6 +2,9 @@
 
 All notable changes for each release will be documented in this file.
 
+## Feb. 23 2024
+- Complete rewrite
+
 ## March. 20 2021
 
 - Updated to latest specification v0.6
