@@ -12,24 +12,23 @@
     <div id="diagram-container"></div>
     <script type="module">
       const vscode = acquireVsCodeApi();
+      /** Waits for the page to be fully loaded before trying to render the graph */
       window.addEventListener('load', async() => {
         await vscode.postMessage({
           command: 'panel-content-loaded'
-        })
+        });
       });
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/+esm';
       (async () => {
         try {
+          /** The diagram container */
           const diagramContainerEl = document.getElementById('diagram-container');
           
-          function updateState(partialState) {
-            vscode.setState({
-              ...vscode.getState(),
-              ...partialState
-            });
-          }
-          
+          /**
+           * Renders the provided graph definition
+           */
           async function updateDiagram({ graphDefinition }) {
+            debugger
             try {
               const { svg, bindFunctions } = await mermaid.render('sw-diagram', graphDefinition);
               diagramContainerEl.innerHTML = svg;
@@ -38,7 +37,6 @@
                 command: 'diagram-rendered',
                 svg: sanitizedSvg
               });
-              updateState({ graphDefinition });
             }
             catch (ex) {
               await vscode.postMessage({
@@ -49,6 +47,9 @@
             }
           }
 
+          /**
+           * Generates a PNG using a canvas
+           */
           function generatePng() {
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
@@ -76,6 +77,7 @@
             img.src = `data:image/svg+xml;charset=utf-8;base64,${base64}`;
           }
           
+          /** Handles commands from the DiagramPanel */
           window.addEventListener('message', async (event) => {
             const { command, ...args } = event.data;
             switch (command) {
@@ -88,14 +90,10 @@
             }
           });
           
+          /** Init Mermaid JS */
           mermaid.initialize({
             startOnLoad: false
           });
-          
-          const state = vscode.getState();
-          if (state?.graphDefinition) {
-            await updateDiagram({ graphDefinition: state.graphDefinition });
-          }
         }
         catch (ex) {
           await vscode.postMessage({
