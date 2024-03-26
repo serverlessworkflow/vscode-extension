@@ -28,7 +28,6 @@
            * Renders the provided graph definition
            */
           async function updateDiagram({ graphDefinition }) {
-            debugger
             try {
               const { svg, bindFunctions } = await mermaid.render('sw-diagram', graphDefinition);
               diagramContainerEl.innerHTML = svg;
