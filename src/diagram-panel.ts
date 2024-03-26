@@ -5,13 +5,25 @@ import { MermaidDiagram, Specification } from '@severlessworkflow/sdk-typescript
 
 export const diagramViewPanelType = 'serverlessWorkflowDiagramPanel';
 export const diagramViewPanelTitle = 'Diagram Preview';
+/**
+ * Type representing the mode of the diagram panel.
+ * - preview: opens a panel and displays the diagram
+ * - svg: generates a SVG from the diagram
+ * - png: generates a PNG from the diagram
+ */
 export type DiagramPanelMode = 'preview' | 'svg' | 'png';
+/**
+ * Options for the diagram panel.
+ */
 export type DiagramPanelOptions = {
   mode?: DiagramPanelMode
 };
 
 let panelContent: string | undefined;
 
+/**
+ * Class representing a diagram panel.
+ */
 export class DiagramPanel {
   #context: vscode.ExtensionContext;
   #panel: vscode.WebviewPanel | undefined;
@@ -19,7 +31,20 @@ export class DiagramPanel {
   #target: vscode.TextDocument | undefined;
   #disposeEventEmitter: vscode.EventEmitter<void> = new vscode.EventEmitter<void>();
   #mode: DiagramPanelMode;
+  /** Gets the current @see vscode.TextDocument target */
+  get target(): vscode.TextDocument | undefined {
+    return this.#target;
+  }
+  /** Gets the current @see DiagramPanelMode */
+  get mode(): DiagramPanelMode {
+    return this.#mode;
+  }
 
+  /**
+   * Instanciates a new @see DiagramPanel
+   * @param context The @see vscode.ExtensionContext
+   * @param options The @see DiagramPanelOptions to instanciate the panel with
+   */
   constructor(context: vscode.ExtensionContext, options?: DiagramPanelOptions) {
     this.#context = context;
     this.#mode = options?.mode || 'preview';
@@ -59,10 +84,17 @@ export class DiagramPanel {
     );
   }
 
+  /**
+   * Event that fires when the panel is disposed.
+   */
   public get onDidDispose(): vscode.Event<void> {
     return this.#disposeEventEmitter.event;
   }
-  
+
+  /**
+   * Renders the panel with the specified target text document.
+   * @param target The target text document.
+   */
   async render(target: vscode.TextDocument): Promise<void> {
     if (!this.#panel) {
       console.warn('No active diagram panel.');
@@ -80,10 +112,28 @@ export class DiagramPanel {
     this.#panel.webview.html = panelContent;
   }
 
+  /**
+   * Shows the diagram
+   * @returns 
+   */
+  async focus(): Promise<void> {
+    if (!this.#panel) {
+      console.warn('No active diagram panel.');
+      return;
+    }
+    this.#panel.reveal(undefined, true);
+  }
+
+  /**
+   * Disposes the panel.
+   */
   dispose() {
     this.#panel?.dispose();
   }
 
+  /**
+   * Initializes the panel.
+   */
   async #initPanel(): Promise<void> {
     if (panelContent) {
       return;
@@ -94,6 +144,10 @@ export class DiagramPanel {
     panelContent = decoder.decode(panelSourceContent);
   }
 
+  /**
+   * Gets the destination file URI when generating an image.
+   * @returns The destination file URI.
+   */
   #getFileDestination(): vscode.Uri | undefined {
     if (!this.#target) {
       return;
@@ -114,6 +168,10 @@ export class DiagramPanel {
     return destination;
   }
 
+  /**
+   * Saves the diagram to a file.
+   * @param buffer The buffer to save.
+   */
   async #saveToFile(buffer: Buffer): Promise<void> {
     try {
       let destination = this.#getFileDestination();
@@ -133,6 +191,10 @@ export class DiagramPanel {
     this.dispose();
   }
 
+  /**
+   * Handles receiving message from the panel.
+   * @param message The message received.
+   */
   async #onPanelReceiveMessage(message: any): Promise<void> {    
     const { command, ...args } = message;
     switch (command) {
@@ -167,7 +229,10 @@ export class DiagramPanel {
       }
     }
   }
-
+  
+  /**
+   * Updates the diagram.
+   */
   async #updateDiagram(): Promise<void> {
     if (!this.#panel) {
       console.warn('No active diagram panel.');
