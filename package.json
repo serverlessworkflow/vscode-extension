@@ -2,11 +2,12 @@
   "name": "serverless-workflow",
   "displayName": "Serverless Workflow",
   "description": "",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "engines": {
     "vscode": "^1.86.0"
   },
   "categories": [
+		"Snippets",
     "Other"
   ],
   "activationEvents": [
@@ -16,12 +17,16 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-		"jsonValidation": [
-			{
-				"fileMatch": ["*.json", "*.yml", "*.yaml"],
-				"url": "https://serverlessworkflow.io/schemas/latest/workflow.json"
-			}
-		],
+    "jsonValidation": [
+      {
+        "fileMatch": [
+          "*.json",
+          "*.yml",
+          "*.yaml"
+        ],
+        "url": "https://serverlessworkflow.io/schemas/1.0.0/workflow.json"
+      }
+    ],
     "commands": [
       {
         "command": "serverlessWorkflow.diagram.preview",
@@ -54,7 +59,7 @@
           "group": "2_workspace"
         }
       ],
-			"editor/context": [
+      "editor/context": [
         {
           "when": "resourceLangId  == json || resourceLangId == yaml",
           "command": "serverlessWorkflow.diagram.preview",
@@ -70,7 +75,7 @@
           "command": "serverlessWorkflow.diagram.png",
           "group": "2_workspace"
         }
-			]
+      ]
     },
     "snippets": [
       {
@@ -82,20 +87,29 @@
         "path": "./snippets/serverless-workflow.yaml.code-snippets"
       }
     ],
-		"keybindings": [
-			{
-				"command": "serverlessWorkflow.diagram.preview",
-				"key": "alt+shift+s p"
-			},
-			{
-				"command": "serverlessWorkflow.diagram.svg",
-				"key": "alt+shift+s v"
-			},
-			{
-				"command": "serverlessWorkflow.diagram.png",
-				"key": "alt+shift+s i"
-			}
-		]
+    "keybindings": [
+      {
+        "command": "serverlessWorkflow.diagram.preview",
+        "key": "alt+shift+s p"
+      },
+      {
+        "command": "serverlessWorkflow.diagram.svg",
+        "key": "alt+shift+s v"
+      },
+      {
+        "command": "serverlessWorkflow.diagram.png",
+        "key": "alt+shift+s i"
+      }
+    ],
+    "configurationDefaults": {
+      "[yaml]": {
+        "editor.quickSuggestions.other": true,
+        "editor.quickSuggestions.strings": true
+      },
+      "yaml.schemas": {
+        "https://serverlessworkflow.io/schemas/1.0.0/workflow.json": ["*.yml", "*.yaml"]
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -117,8 +131,8 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@severlessworkflow/sdk-typescript": "^3.0.3",
-    "mermaid": "^10.8.0",
+    "@serverlessworkflow/sdk": "^1.0.1",
+    "mermaid": "^11.6.0",
     "npm": "^10.4.0"
   }
 }

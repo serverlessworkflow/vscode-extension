@@ -1,7 +1,11 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 
-import { MermaidDiagram, Specification } from '@severlessworkflow/sdk-typescript';
+import {
+  MermaidDiagram,
+  Specification,
+  Classes
+} from '@serverlessworkflow/sdk';
 
 export const diagramViewPanelType = 'serverlessWorkflowDiagramPanel';
 export const diagramViewPanelTitle = 'Diagram Preview';
@@ -75,6 +79,7 @@ export class DiagramPanel {
     );
     vscode.workspace.onDidChangeTextDocument(
       (event) => {
+        console.log('onDidChangeTextDocument -- diagram');
         if (event.document === this.#target) {
           this.#updateDiagram();
         }
@@ -225,7 +230,7 @@ export class DiagramPanel {
       case 'general-exception':
       {
         const { ex } = args;
-        await vscode.window.showErrorMessage(`An error occured while processing the workflow: ${JSON.stringify(ex)}`)
+        await vscode.window.showErrorMessage(`An error occured while processing the workflow: ${JSON.stringify(ex)}`);
       }
     }
   }
@@ -249,7 +254,7 @@ export class DiagramPanel {
     }
     let graphDefinition: string | undefined;
     try {
-      const workflow: Specification.Workflow = Specification.Workflow.fromSource(content);
+      const workflow: Specification.Workflow = Classes.Workflow.deserialize(content);
       graphDefinition = new MermaidDiagram(workflow).sourceCode();
     }
     catch (ex) {
