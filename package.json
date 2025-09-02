@@ -24,7 +24,7 @@
           "*.yml",
           "*.yaml"
         ],
-        "url": "https://serverlessworkflow.io/schemas/1.0.0/workflow.json"
+        "url": "https://serverlessworkflow.io/schemas/1.0.1/workflow.json"
       }
     ],
     "commands": [
@@ -107,7 +107,7 @@
         "editor.quickSuggestions.strings": true
       },
       "yaml.schemas": {
-        "https://serverlessworkflow.io/schemas/1.0.0/workflow.json": ["*.yml", "*.yaml"]
+        "https://serverlessworkflow.io/schemas/1.0.1/workflow.json": ["*.yml", "*.yaml"]
       }
     }
   },
