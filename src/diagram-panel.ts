@@ -230,7 +230,7 @@ export class DiagramPanel {
       case 'general-exception':
       {
         const { ex } = args;
-        await vscode.window.showErrorMessage(`An error occured while processing the workflow: ${JSON.stringify(ex)}`);
+        await vscode.window.showErrorMessage(`An error occurred while processing the workflow: ${JSON.stringify(ex)}`);
       }
     }
   }
@@ -258,7 +258,7 @@ export class DiagramPanel {
       graphDefinition = new MermaidDiagram(workflow).sourceCode();
     }
     catch (ex) {
-      console.warn('An exception occured while parsing the workflow or generating its diagram.', ex);
+      console.warn('An exception occurred while parsing the workflow or generating its diagram.', ex);
       await vscode.window.showErrorMessage(`The ServerlessWorkflow SDK couldn't process the workflow: ${ex}`);
       return;
     }
