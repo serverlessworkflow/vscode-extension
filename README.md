@@ -1,4 +1,6 @@
 # Serverless Workflow Specification - VSCode Extension
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fopen-workflow-specification%2Fvscode-extension.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fopen-workflow-specification%2Fvscode-extension?ref=badge_shield)
+
 
 Provides code hints and snippets for the [CNCF Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
 
@@ -94,3 +96,7 @@ To uninstall the extension run:
 ```shell
 code --uninstall-extension serverless-workflow-vscode-extension-$VERSION$.vsix
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fopen-workflow-specification%2Fvscode-extension.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fopen-workflow-specification%2Fvscode-extension?ref=badge_large)
